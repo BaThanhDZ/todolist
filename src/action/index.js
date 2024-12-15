@@ -1,5 +1,11 @@
 import * as types from './../constants/actionTypes';
 
+export const actDeleteItem = (id) => {
+    return {
+        type: types.DELETE_ITEM,
+        id
+    }
+}
 export const actCloseForm = () => {
     return {
         type: types.CLOSE_FORM
@@ -26,5 +32,22 @@ export const actSearch = (search) => {
     return {
         type: types.CHANGE_SEARCH,
         search
+    }
+}
+export const actSubmit = (item) => {
+    return {
+        type: types.SUBMIT_FORM,
+        item
+    }
+}
+export const actSelected = (item) => {
+    return {
+        type: types.SELECTED_ITEM,
+        item
+    }
+}
+export const actUnSelect = () => {
+    return {
+        type: types.UNSELECT_ITEM
     }
 }

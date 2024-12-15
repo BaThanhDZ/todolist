@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actCloseForm } from '../action/index';
+import { actCloseForm, actSubmit, actUnSelect } from '../action/index';
 
 class Form extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Form extends Component {
   }
   // --------
   componentWillMount() {
-    // let item = this.props.itemsSelected;
+    // let item = this.props.itemSelected;
     // if(item.id !== "") {
     //   this.setState({
     //     task_id: item.id,
@@ -22,10 +22,10 @@ class Form extends Component {
     //     task_level: item.level,
     //   })
     // }
-    this.updateItem(this.props.itemsSelected)
+    this.updateItem(this.props.itemSelected)
   }
   componentWillReceiveProps(nextProps) {
-    // let item = nextProps.itemsSelected;
+    // let item = nextProps.itemSelected;
     // if(item.id !== "") {
     //   this.setState({
     //     task_id: item.id,
@@ -33,10 +33,10 @@ class Form extends Component {
     //     task_level: item.level,
     //   })
     // }
-    this.updateItem(nextProps.itemsSelected)
+    this.updateItem(nextProps.itemSelected)
   }
 
-  updateItem(item) {
+  updateItem = (item) => {
     if(item.id !== "") {
       this.setState({
         task_id: item.id,
@@ -57,13 +57,14 @@ class Form extends Component {
     })
   }
   handleSubmit = (event) => {
+    event.preventDefault();
     let item = {
       id: this.state.task_id,
       name: this.state.task_name,
       level: this.state.task_level,
     }
-    this.props.onClickSubmit(item);
-    event.preventDefault();
+    this.props.submitForm(item);  //dispatch
+    
   }
   handleCancel = () => {
     this.props.cancelForm();
@@ -102,13 +103,19 @@ class Form extends Component {
 
 const mapStateToProps = state => {
   return {
-    isShowForm: state.isShowForm
+    isShowForm: state.isShowForm,
+    itemSelected: state.itemSelected
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     cancelForm: () => {
       dispatch(actCloseForm());
+      dispatch(actUnSelect())
+    },
+    submitForm: (item) => {
+      dispatch(actSubmit(item));
+      dispatch(actCloseForm())
     }
   } 
 }

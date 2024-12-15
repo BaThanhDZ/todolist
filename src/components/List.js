@@ -4,20 +4,19 @@ import Item from './Item';
 import _ from 'lodash';
 
 class List extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
   render() {
-    let {items, search} = this.props;
-    // TO DO 
+    let {items, search, sort} = this.props;
+    let {orderBys, orderDir} = sort;
     let itemsBasic = (items !== null) ? [...items] : [];
+    
+
+    //SEARCH
     items = _.filter(itemsBasic, (item) => {
       return _.includes(item.name.toLowerCase(), search.toLowerCase());
     });
+
+    // SORT 
+    items = _.orderBy(items, [orderBys], [orderDir]);
     
     let elItems = <th colSpan={4} className="text-center"><td>Không có công việc</td></th>
 
@@ -25,8 +24,6 @@ class List extends Component {
       elItems = items.map((item, index) => {
         return (
           <Item 
-            onclickEdit={this.props.onClickEditItem} 
-            onclickDelete={this.props.onclickDeleteItem} 
             key={index} 
             item={item} 
             id={index}
@@ -58,7 +55,8 @@ class List extends Component {
 const mapStateToProps = state => {
   return {
     items: state.items,
-    search: state.search
+    search: state.search,
+    sort: state.sort,
   }
   
 }

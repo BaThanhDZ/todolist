@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
-import items from '../mocks/Task';
 import { connect } from 'react-redux';
-import { actOpenForm } from '../action';
+import { actDeleteItem, actOpenForm, actSelected } from '../action';
 
 class Item extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
+  handleEdit = (item) => {
+    this.props.editItem(item);
   }
-  handleEdit(item) {
-    // this.props.onclickEdit(item);
-    this.props.editItem();
-  }
-  handleDelete(id) {
-    this.props.onclickDelete(id);
+  handleDelete = (id) => {
+    this.props.deleteItem(id);
   }
   setLevel(level) {
     let elLevel = <span className="label label-default">Small</span>;
@@ -48,13 +40,17 @@ class Item extends Component {
 
 const mapStateToProps = state => {
   return {
-    // isShowForm: state.isShowForm
+    
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    editItem: () => {
+    editItem: (item) => {
+      dispatch(actSelected(item));
       dispatch(actOpenForm());
+    },
+    deleteItem: (id) => {
+      dispatch(actDeleteItem(id))
     }
   } 
 }
